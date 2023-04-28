@@ -1,5 +1,6 @@
 import pokemonData from '/pokedex.json'
-
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Pokedex () {
   function getImageUrl(id) {
@@ -14,59 +15,35 @@ function Pokedex () {
     '.png'
     );
   };
-  const pokemon = pokemonData.map((data) => {
-    return (
-    <div key={data.id} className="col p-3">
-      <img src={getImageUrl(data.id)} className="img-flex"></img>
-      <p><strong>{data.name.english}</strong></p>
-      <ul className="list-group">
-        <li className="list-group-item">{data.type[0]} / {data.type[1]}</li>
-        <li className="list-group-item">HP: {data.base.HP}</li> 
-        <li className="list-group-item">Attack: {data.base.Attack}</li> 
-        <li className="list-group-item">Defense: {data.base.Defense}</li>
-        <li className="list-group-item">Sp. Attack: {data.base["Sp. Attack"]}</li>
-        <li className="list-group-item">Sp. Defense: {data.base["Sp. Defense"]}</li>
-        <li className="list-group-item">Speed: {data.base.Speed}</li>
-      </ul>
-    </div>
-      )
-  })
-  /*
-  const rows = pokemon.map((col) => {
-    let row = []
-    for (let i = 0; i < pokemon.length; i++){
-      let minirow = []
-      minirow.push(col)
-    }
-  })
-  */
-
-  /*
-
-  function rowGen(arr){
-    const size = 5; 
-    let arrayOfArrays = [];
-    for (let i=0; i < arr.length; i += size) {
-     arrayOfArrays.push(arr.slice(i, i+size));
-    }
-    console.log(arrayOfArrays[0])
-  }
-  const rowsArr = rowGen(pokemon)
-  const rows = rowsArr.map((row) => {
-    return (
-      <div className="row">
-        {row}
-      </div>
-    )
-  })
-  */
   return (
-    <div className="container">
-      <div className="row p-4">
-        {pokemon}
-      </div>
-    </div>
-  )
+    <Container>
+      <Row>
+        {pokemonData.map((pokemon) => (
+          <Col key={pokemon.id} sm={4} className="mb-4">
+            <Card>
+              <Card.Body>
+                <img src={getImageUrl(pokemon.id)} className="img-flex"></img>
+                <Card.Title>{pokemon.name.english}</Card.Title>
+                <Card.Text>
+                  <strong>ID:</strong> {pokemon.id}<br />
+                  <strong>Types:</strong> {pokemon.type.join(', ')}<br />
+                  <strong>Base Stats:</strong>
+                  <ul className="list-group">
+                    {Object.entries(pokemon.base).map(([stat, value]) => (
+                      <li className="list-group-item" key={stat}>
+                        {stat}: {value}
+                      </li>
+                    ))}
+                  </ul>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  );
+ 
 }
 
 export default Pokedex
